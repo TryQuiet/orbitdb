@@ -3,7 +3,7 @@ import PQueue from 'p-queue'
 import { EventEmitter } from 'events'
 import { TimeoutController } from 'timeout-abort-controller'
 import pathJoin from './utils/path-join.js'
-import { abortableAsyncIterable } from './utils/abortable-iter.js'
+import { abortableSource } from 'abortable-iterator'
 
 const DefaultTimeout = 30000 // 30 seconds
 
@@ -145,7 +145,7 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
   }
 
   const sendHeads = (abortController) => (source) => {
-    return abortableAsyncIterable((async function * () {
+    return abortableSource((async function * () {
       const heads = await log.heads()
       for await (const { bytes } of heads) {
         yield bytes
@@ -154,7 +154,7 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
   }
 
   const receiveHeads = (peerId, abortController) => async (source) => {
-    for await (const value of abortableAsyncIterable(source, abortController.signal)) {
+    for await (const value of abortableSource(source, abortController.signal)) {
       const headBytes = value.subarray()
       if (headBytes && onSynced) {
         await onSynced(headBytes)
