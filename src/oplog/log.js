@@ -13,6 +13,7 @@ import Clock, { tickClock } from './clock.js'
 import Heads from './heads.js'
 import ConflictResolution from './conflict-resolution.js'
 import MemoryStorage from '../storage/memory.js'
+import { EventEmitter } from 'events'
 
 const { LastWriteWins, NoZeroes } = ConflictResolution
 
@@ -56,7 +57,7 @@ const DefaultAccessController = async () => {
  * @memberof module:Log
  * @instance
  */
-const Log = async (identity, { logId, logHeads, access, entryStorage, headsStorage, indexStorage, sortFn } = {}) => {
+const Log = async (identity, { logId, logHeads, access, entryStorage, headsStorage, indexStorage, sortFn, events } = {}) => {
   /**
    * @namespace Log
    * @description The instance returned by {@link module:Log}
@@ -85,6 +86,8 @@ const Log = async (identity, { logId, logHeads, access, entryStorage, headsStora
   // Internal queues for processing appends and joins in their call-order
   const appendQueue = new PQueue({ concurrency: 1 })
   const joinQueue = new PQueue({ concurrency: 1 })
+  
+  events = events || new EventEmitter()
 
   /**
    * Returns the clock of the log.
