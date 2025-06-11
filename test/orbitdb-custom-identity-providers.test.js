@@ -18,7 +18,7 @@ describe('Add a custom identity provider', function () {
     useIdentityProvider(CustomIdentityProvider)
     const identities = await Identities({ path: './test/test-data/orbitdb/identities' })
     const identity = await identities.createIdentity({ id: 'abc' })
-    const orbitdb = await createOrbitDB({ ipfs, identities, id: 'abc', directory: './test/test-data/orbitdb'})
+    const orbitdb = await createOrbitDB({ ipfs, identities, id: 'abc', directory: './test/test-data/orbitdb' })
 
     deepStrictEqual(orbitdb.identity, identity)
 
