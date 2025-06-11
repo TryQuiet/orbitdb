@@ -6,7 +6,7 @@ import testKeysPath from '../fixtures/test-keys-path.js'
 
 const { create } = Entry
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Log', function () {
   this.timeout(5000)

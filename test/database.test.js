@@ -9,7 +9,7 @@ import MemoryStorage from '../src/storage/memory.js'
 import testKeysPath from './fixtures/test-keys-path.js'
 import createHelia from './utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Database', function () {
   this.timeout(30000)
@@ -47,15 +47,15 @@ describe('Database', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   afterEach(async () => {
-    await rimraf('./orbitdb')
+    await rimraf('./test/test-data/orbitdb')
   })
 
   it('adds an operation', async () => {
-    db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './orbitdb' })
+    db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     const expected = 'zdpuAwhx6xVpnMPUA7Q4JrvZsyoti5wZ18iDeFwBjPAwsRNof'
     const op = { op: 'PUT', key: 1, value: 'record 1 on db 1' }
     const actual = await db.addOperation(op)
@@ -67,11 +67,11 @@ describe('Database', function () {
 
   describe('Options', () => {
     it('uses default directory for headsStorage', async () => {
-      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController })
+      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
       const op = { op: 'PUT', key: 1, value: 'record 1 on db 1' }
       const hash = await db.addOperation(op)
 
-      const headsPath = Path.join('./orbitdb/', `${databaseId}/`, '/log/_heads/')
+      const headsPath = Path.join('./test/test-data/orbitdb/', `${databaseId}/`, '/log/_heads/')
 
       strictEqual(await existsSync(headsPath), true)
 
@@ -87,11 +87,11 @@ describe('Database', function () {
     })
 
     it('uses given directory for headsStorage', async () => {
-      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './custom-directory' })
+      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/custom-directory' })
       const op = { op: 'PUT', key: 1, value: 'record 1 on db 1' }
       const hash = await db.addOperation(op)
 
-      const headsPath = Path.join('./custom-directory/', `${databaseId}/`, '/log/_heads/')
+      const headsPath = Path.join('./test/test-data/custom-directory/', `${databaseId}/`, '/log/_heads/')
 
       strictEqual(await existsSync(headsPath), true)
 
@@ -104,12 +104,12 @@ describe('Database', function () {
       await headsStorage.close()
 
       await rimraf(headsPath)
-      await rimraf('./custom-directory')
+      await rimraf('./test/test-data/custom-directory')
     })
 
     it('uses given MemoryStorage for headsStorage', async () => {
       const headsStorage = await MemoryStorage()
-      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './orbitdb', headsStorage })
+      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/orbitdb', headsStorage })
       const op = { op: 'PUT', key: 1, value: 'record 1 on db 1' }
       const hash = await db.addOperation(op)
 
@@ -120,7 +120,7 @@ describe('Database', function () {
 
     it('uses given MemoryStorage for entryStorage', async () => {
       const entryStorage = await MemoryStorage()
-      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './orbitdb', entryStorage })
+      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/orbitdb', entryStorage })
       const op = { op: 'PUT', key: 1, value: 'record 1 on db 1' }
       const hash = await db.addOperation(op)
 
@@ -132,7 +132,7 @@ describe('Database', function () {
 
   describe('Events', () => {
     beforeEach(async () => {
-      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './orbitdb' })
+      db = await Database({ ipfs, identity: testIdentity, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     it('emits \'close\' when the database is closed', async () => {

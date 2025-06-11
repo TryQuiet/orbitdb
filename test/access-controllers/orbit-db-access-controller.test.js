@@ -7,8 +7,8 @@ import OrbitDBAccessController from '../../src/access-controllers/orbitdb.js'
 import connectPeers from '../utils/connect-nodes.js'
 import createHelia from '../utils/create-helia.js'
 
-const dbPath1 = './orbitdb/tests/orbitdb-access-controller/1'
-const dbPath2 = './orbitdb/tests/orbitdb-access-controller/2'
+const dbPath1 = './test/test-data/orbitdb/tests/orbitdb-access-controller/1'
+const dbPath2 = './test/test-data/orbitdb/tests/orbitdb-access-controller/2'
 
 describe('OrbitDBAccessController', function () {
   let ipfs1, ipfs2
@@ -49,9 +49,9 @@ describe('OrbitDBAccessController', function () {
       await ipfs2.stop()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   describe('Default write access', function () {

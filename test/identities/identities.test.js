@@ -11,7 +11,7 @@ import NoTypeIdentityProvider from '../fixtures/providers/no-type.js'
 import NoVerifyIdentityIdentityProvider from '../fixtures/providers/no-verify-identity.js'
 
 const type = 'publickey'
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Identities', function () {
   before(async () => {

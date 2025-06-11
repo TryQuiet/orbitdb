@@ -25,7 +25,7 @@ describe('Add a custom access controller', function () {
 
   before(async () => {
     ipfs = await createHelia()
-    orbitdb = await OrbitDB({ ipfs })
+    orbitdb = await OrbitDB({ ipfs, directory: './test/test-data/orbitdb' })
   })
 
   after(async () => {
@@ -37,8 +37,8 @@ describe('Add a custom access controller', function () {
       await ipfs.stop()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   describe('Default supported access controllers', function () {

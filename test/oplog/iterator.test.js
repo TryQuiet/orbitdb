@@ -8,7 +8,7 @@ import testKeysPath from '../fixtures/test-keys-path.js'
 
 const { createLogWithSixteenEntries } = LogCreator
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Log - Iterator', function () {
   this.timeout(5000)

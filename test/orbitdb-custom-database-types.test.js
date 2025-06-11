@@ -27,7 +27,7 @@ describe('Add a custom database type', function () {
 
   before(async () => {
     ipfs = await createHelia()
-    orbitdb = await createOrbitDB({ ipfs })
+    orbitdb = await createOrbitDB({ ipfs, directory: './test/test-data/orbitdb' })
   })
 
   after(async () => {
@@ -39,8 +39,8 @@ describe('Add a custom database type', function () {
       await ipfs.stop()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   describe('Default supported database types', function () {
@@ -62,7 +62,7 @@ describe('Add a custom database type', function () {
       const name = 'hello keyvalue-indexed database'
       const db = await orbitdb.open(name, { type: 'keyvalue' })
 
-      const indexDirectory = pathJoin('./orbitdb', `./${db.address}/_index/`)
+      const indexDirectory = pathJoin('./test/test-data/orbitdb', `./${db.address}/_index/`)
 
       strictEqual(await existsSync(indexDirectory), true)
     })

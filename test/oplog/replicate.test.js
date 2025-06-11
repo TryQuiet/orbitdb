@@ -7,7 +7,7 @@ import connectPeers from '../utils/connect-nodes.js'
 import waitForPeers from '../utils/wait-for-peers.js'
 import createHelia from '../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Log - Replication', function () {
   let ipfs1, ipfs2
@@ -53,8 +53,8 @@ describe('Log - Replication', function () {
     await storage2.close()
 
     await rimraf(keysPath)
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   describe('replicates logs deterministically', async function () {

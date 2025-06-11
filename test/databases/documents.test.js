@@ -6,7 +6,7 @@ import Documents from '../../src/databases/documents.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Documents Database', function () {
   let ipfs
@@ -37,13 +37,13 @@ describe('Documents Database', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   describe('Default index \'_id\'', () => {
     beforeEach(async () => {
-      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -147,7 +147,7 @@ describe('Documents Database', function () {
 
   describe('Custom index \'doc\'', () => {
     beforeEach(async () => {
-      db = await Documents({ indexBy: 'doc' })({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents({ indexBy: 'doc' })({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -250,7 +250,7 @@ describe('Documents Database', function () {
 
   describe('Iterator', () => {
     before(async () => {
-      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     after(async () => {
@@ -334,12 +334,12 @@ describe('Documents Database', function () {
     }
 
     beforeEach(async () => {
-      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
       for (const doc of Object.values(data)) {
         await db.put(doc)
       }
       await db.close()
-      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await Documents()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {

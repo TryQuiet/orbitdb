@@ -28,7 +28,7 @@ const queryLoop = async () => {
 
   console.log('Benchmark duration is ' + benchmarkDuration + ' seconds')
 
-  await rmrf('./orbitdb')
+  await rmrf('./benchmarks/test-data/orbitdb')
 
   const identities = await Identities()
   const testIdentity = await identities.createIdentity({ id: 'userA' })
@@ -59,7 +59,7 @@ const queryLoop = async () => {
     }
     if (seconds >= benchmarkDuration) {
       clearInterval(interval)
-      await rmrf('./orbitdb')
+      await rmrf('./benchmarks/test-data/orbitdb')
       process.exit(0)
     }
     console.log(`${queriesPerSecond} queries per second, ${totalQueries} queries in ${seconds} seconds`)

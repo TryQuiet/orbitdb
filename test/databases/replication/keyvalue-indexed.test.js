@@ -8,7 +8,7 @@ import connectPeers from '../../utils/connect-nodes.js'
 import waitFor from '../../utils/wait-for.js'
 import createHelia from '../../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('KeyValueIndexed Database Replication', function () {
   this.timeout(30000)
@@ -33,10 +33,10 @@ describe('KeyValueIndexed Database Replication', function () {
     await connectPeers(ipfs1, ipfs2)
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
 
     await copy(testKeysPath, keysPath)
     keystore = await KeyStore({ path: keysPath })
@@ -59,10 +59,10 @@ describe('KeyValueIndexed Database Replication', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   afterEach(async () => {
@@ -92,8 +92,8 @@ describe('KeyValueIndexed Database Replication', function () {
       console.error(err)
     }
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     kv2.events.on('join', onConnected)
     kv2.events.on('update', onUpdate)
@@ -159,8 +159,8 @@ describe('KeyValueIndexed Database Replication', function () {
       console.error(err)
     }
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     kv2.events.on('join', onConnected)
     kv2.events.on('update', onUpdate)
@@ -182,8 +182,8 @@ describe('KeyValueIndexed Database Replication', function () {
     await kv1.close()
     await kv2.close()
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     const value0 = await kv2.get('init')
     deepStrictEqual(value0, true)
@@ -233,8 +233,8 @@ describe('KeyValueIndexed Database Replication', function () {
       replicated1 = expectedEntryHash1 !== null && entry.hash === expectedEntryHash1
     }
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     kv2.events.on('update', onUpdate)
 
@@ -260,7 +260,7 @@ describe('KeyValueIndexed Database Replication', function () {
 
     await kv2.close()
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
 
     const onUpdate3 = async (entry) => {
       replicated3 = expectedEntryHash3 && entry.hash === expectedEntryHash3
@@ -275,7 +275,7 @@ describe('KeyValueIndexed Database Replication', function () {
     await kv1.del('three')
     expectedEntryHash2 = await kv1.set('four', 4)
 
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     const onUpdate2 = (entry) => {
       replicated2 = expectedEntryHash2 && entry.hash === expectedEntryHash2
@@ -327,7 +327,7 @@ describe('KeyValueIndexed Database Replication', function () {
       deepStrictEqual(err, undefined)
     }
 
-    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb11' })
+    kv1 = await KeyValueIndexed()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb11' })
 
     kv1.events.on('error', onError)
 
@@ -337,7 +337,7 @@ describe('KeyValueIndexed Database Replication', function () {
     await kv1.set('delete', 'this value')
     await kv1.del('delete')
 
-    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb22' })
+    kv2 = await KeyValueIndexed()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb22' })
 
     const onUpdate = (entry) => {
       replicated = true
@@ -368,7 +368,7 @@ describe('KeyValueIndexed Database Replication', function () {
       { key: 'hello', value: 'friend' }
     ])
 
-    await rimraf('./orbitdb11')
-    await rimraf('./orbitdb22')
+    await rimraf('./test/test-data/orbitdb11')
+    await rimraf('./test/test-data/orbitdb22')
   })
 })

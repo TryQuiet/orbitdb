@@ -6,7 +6,7 @@ import KeyValue from '../../src/databases/keyvalue.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('KeyValue Database', function () {
   let ipfs
@@ -37,13 +37,13 @@ describe('KeyValue Database', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   describe('Creating a KeyValue database', () => {
     beforeEach(async () => {
-      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -70,7 +70,7 @@ describe('KeyValue Database', function () {
 
   describe('KeyValue database API', () => {
     beforeEach(async () => {
-      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -187,7 +187,7 @@ describe('KeyValue Database', function () {
 
   describe('Iterator', () => {
     before(async () => {
-      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValue()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     after(async () => {

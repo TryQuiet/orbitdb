@@ -6,7 +6,7 @@ import Events from '../../src/databases/events.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Events Database', function () {
   let ipfs
@@ -37,12 +37,12 @@ describe('Events Database', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   beforeEach(async () => {
-    db = await Events()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+    db = await Events()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
   })
 
   afterEach(async () => {

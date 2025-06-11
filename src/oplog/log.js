@@ -86,7 +86,7 @@ const Log = async (identity, { logId, logHeads, access, entryStorage, headsStora
   // Internal queues for processing appends and joins in their call-order
   const appendQueue = new PQueue({ concurrency: 1 })
   const joinQueue = new PQueue({ concurrency: 1 })
-  
+
   events = events || new EventEmitter()
 
   /**

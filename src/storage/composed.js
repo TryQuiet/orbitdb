@@ -12,7 +12,7 @@
  * await ComposedStorage(storage1, await IPFSBlockStorage())
  */
 
-import EventEmitter from "events"
+import EventEmitter from 'events'
 
 /**
   * Creates an instance of ComposedStorage.

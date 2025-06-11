@@ -6,7 +6,7 @@ import { rimraf as rmrf } from 'rimraf'
 ;(async () => {
   console.log('Starting benchmark...')
 
-  await rmrf('./orbitdb')
+  await rmrf('./benchmarks/test-data/orbitdb')
 
   const identities = await Identities()
   const testIdentity = await identities.createIdentity({ id: 'userA' })
@@ -55,7 +55,7 @@ import { rimraf as rmrf } from 'rimraf'
 
   console.log(`Iterating ${all.length} entries took ${duration2} ms, ${operationsPerSecond2} ops/s, ${millisecondsPerOp2} ms/op`)
 
-  await rmrf('./orbitdb')
+  await rmrf('./benchmarks/test-data/orbitdb')
 
   process.exit(0)
 })()
