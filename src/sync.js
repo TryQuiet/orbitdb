@@ -159,9 +159,9 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
       if (headBytes && onSynced) {
         await onSynced(headBytes)
       }
-      if (started) {
-        await onPeerJoined(peerId)
-      }
+    }
+    if (started) {
+      await onPeerJoined(peerId)
     }
   }
 
