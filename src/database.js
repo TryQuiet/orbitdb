@@ -252,7 +252,7 @@ const Database = async ({ ipfs, identity, address, name, access, directory, meta
      * @memberof module:Databases~Database
      * @instance
      */
-    access,
+    access
   }
 }
 
