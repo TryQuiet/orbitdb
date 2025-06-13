@@ -9,7 +9,7 @@ import LevelStorage from '../src/storage/level.js'
 import testKeysPath from './fixtures/test-keys-path.js'
 
 const defaultPath = './keystore'
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('KeyStore', () => {
   let keystore

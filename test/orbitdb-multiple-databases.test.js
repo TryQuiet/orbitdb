@@ -6,8 +6,8 @@ import connectPeers from './utils/connect-nodes.js'
 import waitFor from './utils/wait-for.js'
 import createHelia from './utils/create-helia.js'
 
-const dbPath1 = './orbitdb/tests/multiple-databases/1'
-const dbPath2 = './orbitdb/tests/multiple-databases/2'
+const dbPath1 = './test/test-data/orbitdb/tests/multiple-databases/1'
+const dbPath2 = './test/test-data/orbitdb/tests/multiple-databases/2'
 
 const databaseInterfaces = [
   {
@@ -64,7 +64,7 @@ describe('orbitdb - Multiple Databases', function () {
       await orbitdb2.stop()
     }
 
-    await rimraf('./orbitdb')
+    await rimraf('./test/test-data/orbitdb')
 
     if (ipfs1) {
       await ipfs1.stop()
@@ -73,8 +73,8 @@ describe('orbitdb - Multiple Databases', function () {
       await ipfs2.stop()
     }
 
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   beforeEach(async () => {

@@ -12,13 +12,13 @@ EventEmitter.defaultMaxListeners = 10000
 
   const entryCount = 1000
 
-  await rmrf('./orbitdb1')
-  await rmrf('./orbitdb2')
+  await rmrf('./benchmarks/test-data/orbitdb1')
+  await rmrf('./benchmarks/test-data/orbitdb2')
 
   const [ipfs1, ipfs2] = await Promise.all([createHelia(), createHelia()])
 
-  const orbitdb1 = await createOrbitDB({ ipfs: ipfs1, directory: './orbitdb1' })
-  const orbitdb2 = await createOrbitDB({ ipfs: ipfs2, directory: './orbitdb2' })
+  const orbitdb1 = await createOrbitDB({ ipfs: ipfs1, directory: './benchmarks/test-data/orbitdb1' })
+  const orbitdb2 = await createOrbitDB({ ipfs: ipfs2, directory: './benchmarks/test-data/orbitdb2' })
 
   await connectPeers(ipfs1, ipfs2)
 
@@ -67,8 +67,8 @@ EventEmitter.defaultMaxListeners = 10000
   await ipfs1.stop()
   await ipfs2.stop()
 
-  await rmrf('./orbitdb1')
-  await rmrf('./orbitdb2')
+  await rmrf('./benchmarks/test-data/orbitdb1')
+  await rmrf('./benchmarks/test-data/orbitdb2')
 
   process.exit(0)
 })()

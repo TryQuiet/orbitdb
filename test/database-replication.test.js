@@ -10,7 +10,7 @@ import IPFSBlockStorage from '../src/storage/ipfs-block.js'
 import MemoryStorage from '../src/storage/memory.js'
 import createHelia from './utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Database - Replication', function () {
   let ipfs1, ipfs2
@@ -45,13 +45,13 @@ describe('Database - Replication', function () {
       await db1.drop()
       await db1.close()
 
-      await rimraf('./orbitdb1')
+      await rimraf('./test/test-data/orbitdb1')
     }
     if (db2) {
       await db2.drop()
       await db2.close()
 
-      await rimraf('./orbitdb2')
+      await rimraf('./test/test-data/orbitdb2')
     }
 
     if (ipfs1) {
@@ -67,13 +67,13 @@ describe('Database - Replication', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   describe('Replicate across peers', () => {
     beforeEach(async () => {
-      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
+      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
     })
 
     it('replicates databases across two peers', async () => {
@@ -88,7 +88,7 @@ describe('Database - Replication', function () {
         replicated = expectedEntryHash !== null && entry.hash === expectedEntryHash
       }
 
-      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
       db2.events.on('join', onConnected)
       db2.events.on('update', onUpdate)
@@ -125,7 +125,7 @@ describe('Database - Replication', function () {
         replicated = expectedEntryHash && entry.hash === expectedEntryHash
       }
 
-      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
       db2.events.on('join', onConnected)
       db2.events.on('update', onUpdate)
@@ -169,7 +169,7 @@ describe('Database - Replication', function () {
 
       await db1.addOperation({ op: 'PUT', key: 1, value: 'record 1 on db 1' })
 
-      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
       db2.events.on('join', onConnected)
 
@@ -193,8 +193,8 @@ describe('Database - Replication', function () {
     it('uses given ComposedStorage with MemoryStorage/IPFSBlockStorage for entryStorage', async () => {
       const storage1 = await ComposedStorage(await MemoryStorage(), await IPFSBlockStorage({ ipfs: ipfs1, pin: true }))
       const storage2 = await ComposedStorage(await MemoryStorage(), await IPFSBlockStorage({ ipfs: ipfs2, pin: true }))
-      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1', entryStorage: storage1 })
-      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2', entryStorage: storage2 })
+      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1', entryStorage: storage1 })
+      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2', entryStorage: storage2 })
 
       let connected1 = false
       let connected2 = false
@@ -234,8 +234,8 @@ describe('Database - Replication', function () {
 
   describe('Events', () => {
     beforeEach(async () => {
-      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+      db1 = await Database({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+      db2 = await Database({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
     })
 
     it('emits \'update\' once when one operation is added', async () => {

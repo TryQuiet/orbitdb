@@ -16,9 +16,9 @@ describe('Add a custom identity provider', function () {
 
   it('creates an identity using an id and default pubkey provider', async () => {
     useIdentityProvider(CustomIdentityProvider)
-    const identities = await Identities()
+    const identities = await Identities({ path: './test/test-data/orbitdb/identities' })
     const identity = await identities.createIdentity({ id: 'abc' })
-    const orbitdb = await createOrbitDB({ ipfs, identities, id: 'abc' })
+    const orbitdb = await createOrbitDB({ ipfs, identities, id: 'abc', directory: './test/test-data/orbitdb' })
 
     deepStrictEqual(orbitdb.identity, identity)
 
@@ -27,10 +27,10 @@ describe('Add a custom identity provider', function () {
 
   it('creates an identity using a custom provider', async () => {
     useIdentityProvider(CustomIdentityProvider)
-    const identities = await Identities()
+    const identities = await Identities({ path: './test/test-data/orbitdb' })
     const identity = { provider: CustomIdentityProvider() }
     const expectedIdentity = await identities.createIdentity(identity)
-    const orbitdb = await createOrbitDB({ ipfs, identities, identity })
+    const orbitdb = await createOrbitDB({ ipfs, identities, identity, directory: './test/test-data/orbitdb' })
 
     deepStrictEqual(orbitdb.identity, expectedIdentity)
 
@@ -39,9 +39,9 @@ describe('Add a custom identity provider', function () {
 
   it('uses an existing identity created with a custom provider', async () => {
     useIdentityProvider(CustomIdentityProvider)
-    const identities = await Identities()
+    const identities = await Identities({ path: './test/test-data/orbitdb/identities' })
     const identity = await identities.createIdentity({ provider: CustomIdentityProvider() })
-    const orbitdb = await createOrbitDB({ ipfs, identities, identity })
+    const orbitdb = await createOrbitDB({ ipfs, identities, identity, directory: './test/test-data/orbitdb' })
 
     deepStrictEqual(orbitdb.identity, identity)
 
@@ -53,7 +53,7 @@ describe('Add a custom identity provider', function () {
       await ipfs.stop()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 })

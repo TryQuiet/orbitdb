@@ -2,7 +2,7 @@ import { privateKeyFromRaw } from '@libp2p/crypto/keys'
 import { fromString as uint8ArrayFromString } from 'uint8arrays/from-string'
 import { Identities, KeyStore } from '../../src/index.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 const isBrowser = () => typeof window !== 'undefined'
 

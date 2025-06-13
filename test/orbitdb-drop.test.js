@@ -18,7 +18,7 @@ describe('Drop databases', function () {
     if (ipfs) {
       await ipfs.stop()
     }
-    await rimraf('./orbitdb')
+    await rimraf('./test/test-data/orbitdb')
     await rimraf('./ipfs')
   })
 
@@ -26,7 +26,7 @@ describe('Drop databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld')
     })
 
@@ -37,7 +37,7 @@ describe('Drop databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns no entries in the database after dropping it', async () => {
@@ -88,7 +88,7 @@ describe('Drop databases', function () {
 
   describe('dropping an empty database', () => {
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld')
     })
 
@@ -100,7 +100,7 @@ describe('Drop databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb1')
+      await rimraf('./test/test-data/orbitdb1')
     })
 
     it('doesn\'t error when dropping an empty database', async () => {

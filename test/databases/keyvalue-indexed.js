@@ -8,7 +8,7 @@ import KeyValueIndexed from '../../src/databases/keyvalue-indexed.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 import createHelia from '../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('KeyValueIndexed Database', function () {
   let ipfs
@@ -43,13 +43,13 @@ describe('KeyValueIndexed Database', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
   })
 
   describe('Creating a KeyValueIndexed database', () => {
     beforeEach(async () => {
-      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -65,7 +65,7 @@ describe('KeyValueIndexed Database', function () {
     })
 
     it('creates a directory for the persisted index', async () => {
-      const expectedPath = path.join('./orbitdb', `./${db.address}`, '/_index')
+      const expectedPath = path.join('./test/test-data/orbitdb', `./${db.address}`, '/_index')
       const directoryExists = fs.existsSync(expectedPath)
       strictEqual(directoryExists, true)
     })
@@ -82,7 +82,7 @@ describe('KeyValueIndexed Database', function () {
 
   describe('KeyValueIndexed database API', () => {
     beforeEach(async () => {
-      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     afterEach(async () => {
@@ -199,7 +199,7 @@ describe('KeyValueIndexed Database', function () {
 
   describe('Iterator', () => {
     before(async () => {
-      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValueIndexed()({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
     })
 
     after(async () => {
@@ -282,7 +282,7 @@ describe('KeyValueIndexed Database', function () {
 
     it('can use a custom indexStorage', async () => {
       const storage = await MemoryStorage()
-      db = await KeyValueIndexed({ storage })({ ipfs, identity: testIdentity1, address: databaseId, accessController })
+      db = await KeyValueIndexed({ storage })({ ipfs, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb' })
 
       await db.put('key', 'value')
 

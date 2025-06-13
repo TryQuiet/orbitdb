@@ -5,7 +5,7 @@ import { Log } from '../../src/oplog/index.js'
 import { Identities, KeyStore } from '../../src/index.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Log - References', function () {
   this.timeout(60000)

@@ -11,8 +11,8 @@ EventEmitter.defaultMaxListeners = 10000
 
   const entryCount = 1000
 
-  await rmrf('./ipfs')
-  await rmrf('./orbitdb')
+  await rmrf('./benchmarks/test-data/ipfs')
+  await rmrf('./benchmarks/test-data/orbitdb')
 
   const ipfs = await createHelia()
   const orbitdb = await createOrbitDB({ ipfs })
@@ -61,8 +61,8 @@ EventEmitter.defaultMaxListeners = 10000
   await orbitdb.stop()
   await ipfs.stop()
 
-  await rmrf('./ipfs')
-  await rmrf('./orbitdb')
+  await rmrf('./benchmarks/test-data/ipfs')
+  await rmrf('./benchmarks/test-data/orbitdb')
 
   process.exit(0)
 })()

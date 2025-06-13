@@ -3,6 +3,7 @@ import PQueue from 'p-queue'
 import { EventEmitter } from 'events'
 import { TimeoutController } from 'timeout-abort-controller'
 import pathJoin from './utils/path-join.js'
+import { abortableSource } from 'abortable-iterator'
 
 const DefaultTimeout = 30000 // 30 seconds
 
@@ -143,17 +144,17 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
     events.emit('join', peerId, heads)
   }
 
-  const sendHeads = (source) => {
-    return (async function * () {
+  const sendHeads = (abortController) => (source) => {
+    return abortableSource((async function * () {
       const heads = await log.heads()
       for await (const { bytes } of heads) {
         yield bytes
       }
-    })()
+    })(), abortController.signal)
   }
 
-  const receiveHeads = (peerId) => async (source) => {
-    for await (const value of source) {
+  const receiveHeads = (peerId, abortController) => async (source) => {
+    for await (const value of abortableSource(source, abortController.signal)) {
       const headBytes = value.subarray()
       if (headBytes && onSynced) {
         await onSynced(headBytes)
@@ -166,10 +167,14 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
 
   const handleReceiveHeads = async ({ connection, stream }) => {
     const peerId = String(connection.remotePeer)
+    const abortController = new AbortController()
     try {
       peers.add(peerId)
-      await pipe(stream, receiveHeads(peerId), sendHeads, stream)
+      await pipe(stream, receiveHeads(peerId, abortController), sendHeads(abortController), stream)
     } catch (e) {
+      if (!abortController.signal.aborted) {
+        abortController.abort(e)
+      }
       peers.delete(peerId)
       events.emit('error', e)
     }
@@ -188,18 +193,18 @@ const Sync = async ({ ipfs, log, events, onSynced, start, timeout }) => {
           return
         }
         const timeoutController = new TimeoutController(timeout)
+        const abortController = new AbortController()
         const { signal } = timeoutController
         try {
           peers.add(peerId)
           const stream = await libp2p.dialProtocol(remotePeer, headsSyncAddress, { signal })
-          await pipe(sendHeads, stream, receiveHeads(peerId))
+          await pipe(sendHeads(abortController), stream, receiveHeads(peerId, abortController))
         } catch (e) {
           peers.delete(peerId)
-          if (e.name === 'UnsupportedProtocolError') {
-            // Skip peer, they don't have this database currently
-          } else {
-            events.emit('error', e)
+          if (!abortController.signal.aborted) {
+            abortController.abort(e)
           }
+          events.emit('error', e)
         } finally {
           if (timeoutController) {
             timeoutController.clear()

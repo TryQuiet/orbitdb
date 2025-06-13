@@ -8,7 +8,7 @@ import connectPeers from '../../utils/connect-nodes.js'
 import waitFor from '../../utils/wait-for.js'
 import createHelia from '../../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Documents Database Replication', function () {
   this.timeout(10000)
@@ -54,15 +54,15 @@ describe('Documents Database Replication', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   beforeEach(async () => {
-    db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    db1 = await Documents()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    db2 = await Documents()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
   })
 
   afterEach(async () => {

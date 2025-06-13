@@ -14,12 +14,12 @@ describe('Replicating databases', function () {
   let orbitdb1, orbitdb2
 
   before(async () => {
-    ipfs1 = await createHelia({ directory: './ipfs1' })
-    ipfs2 = await createHelia({ directory: './ipfs2' })
+    ipfs1 = await createHelia({ directory: './test/test-data/ipfs1' })
+    ipfs2 = await createHelia({ directory: './test/test-data/ipfs2' })
     await connectPeers(ipfs1, ipfs2)
 
-    orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
-    orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './orbitdb2' })
+    orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
+    orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './test/test-data/orbitdb2' })
   })
 
   after(async () => {
@@ -30,10 +30,10 @@ describe('Replicating databases', function () {
     await ipfs1.stop()
     await ipfs2.stop()
 
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   describe('replicating a database', () => {
@@ -147,13 +147,13 @@ describe('Replicating databases', function () {
       await ipfs1.stop()
       await ipfs2.stop()
 
-      ipfs1 = await createHelia({ directory: './ipfs1' })
-      ipfs2 = await createHelia({ directory: './ipfs2' })
+      ipfs1 = await createHelia({ directory: './test/test-data/ipfs1' })
+      ipfs2 = await createHelia({ directory: './test/test-data/ipfs2' })
 
       await connectPeers(ipfs1, ipfs2)
 
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
-      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './orbitdb2' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
+      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './test/test-data/orbitdb2' })
 
       db1 = await orbitdb1.open('helloworld', { referencesCount: 0 })
       db2 = await orbitdb2.open(db1.address)

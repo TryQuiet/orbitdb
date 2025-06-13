@@ -26,17 +26,17 @@ describe('Open databases', function () {
     if (ipfs2) {
       await ipfs2.stop()
     }
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   describe('creating a database instance', () => {
     let db
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
       db = await orbitdb1.open('helloworld')
     })
 
@@ -48,7 +48,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb1')
+      await rimraf('./test/test-data/orbitdb1')
     })
 
     it('creates a database instance', async () => {
@@ -143,7 +143,7 @@ describe('Open databases', function () {
     const expected = { hello: 'world' }
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
       db = await orbitdb1.open('helloworld', { meta: expected })
     })
 
@@ -155,7 +155,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb1')
+      await rimraf('./test/test-data/orbitdb1')
     })
 
     it('contains the given meta info', async () => {
@@ -169,7 +169,7 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld')
 
       for (let i = 0; i < amount; i++) {
@@ -186,7 +186,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns all entries in the database', async () => {
@@ -223,7 +223,7 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld2')
 
       for (let i = 0; i < amount; i++) {
@@ -235,7 +235,7 @@ describe('Open databases', function () {
       await db.close()
       await orbitdb1.stop()
 
-      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2' })
+      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './test/test-data/orbitdb' })
     })
 
     after(async () => {
@@ -245,7 +245,7 @@ describe('Open databases', function () {
       if (orbitdb2) {
         await orbitdb2.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns all entries in the database', async () => {
@@ -275,8 +275,8 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
-      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './orbitdb2' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
+      orbitdb2 = await createOrbitDB({ ipfs: ipfs2, id: 'user2', directory: './test/test-data/orbitdb2' })
       db1 = await orbitdb1.open('helloworld2')
       for (let i = 0; i < amount; i++) {
         await db1.add('hello' + i)
@@ -297,8 +297,8 @@ describe('Open databases', function () {
       if (orbitdb2) {
         await orbitdb2.stop()
       }
-      await rimraf('./orbitdb1')
-      await rimraf('./orbitdb2')
+      await rimraf('./test/test-data/orbitdb1')
+      await rimraf('./test/test-data/orbitdb2')
     })
 
     it('replicates the database', async () => {
@@ -377,7 +377,7 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld', { type: 'keyvalue' })
       address = db.address
 
@@ -395,7 +395,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns all entries in the database', async () => {
@@ -424,7 +424,7 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld', { Database: KeyValueIndexed() })
       address = db.address
 
@@ -443,7 +443,7 @@ describe('Open databases', function () {
         await orbitdb1.stop()
       }
       await rimraf('./index')
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns all entries in the database and in the index', async () => {
@@ -473,7 +473,7 @@ describe('Open databases', function () {
     const amount = 10
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
       db = await orbitdb1.open('helloworld', { type: 'documents' })
       address = db.address
 
@@ -491,7 +491,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns all entries in the database', async () => {
@@ -518,7 +518,7 @@ describe('Open databases', function () {
     let db1, db2
 
     before(async () => {
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
     })
 
     after(async () => {
@@ -531,7 +531,7 @@ describe('Open databases', function () {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns the database instance when opened with a name multiple times', async () => {
@@ -562,17 +562,17 @@ describe('Open databases', function () {
       if (orbitdb) {
         await orbitdb.stop()
       }
-      await rimraf('./orbitdb')
+      await rimraf('./test/test-data/orbitdb')
     })
 
     it('returns the database instance', async () => {
       let err
 
       try {
-        orbitdb = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+        orbitdb = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
         db = await orbitdb.open('helloworld1')
         await orbitdb.stop()
-        orbitdb = await createOrbitDB({ ipfs: ipfs1, id: 'user1' })
+        orbitdb = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb' })
         db = await orbitdb.open('helloworld1')
       } catch (e) {
         err = e

@@ -6,7 +6,7 @@ import { Clock } from '../../src/oplog/log.js'
 import { MemoryStorage } from '../../src/storage/index.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 const last = (arr) => {
   return arr[arr.length - 1]

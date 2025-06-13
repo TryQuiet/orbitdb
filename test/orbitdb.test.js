@@ -124,15 +124,15 @@ describe('OrbitDB', function () {
 
   describe('OrbitDB instance creation - user given parameters', () => {
     before(async () => {
-      await rimraf('./orbitdb1')
-      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './orbitdb1' })
+      await rimraf('./test/test-data/orbitdb1')
+      orbitdb1 = await createOrbitDB({ ipfs: ipfs1, id: 'user1', directory: './test/test-data/orbitdb1' })
     })
 
     after(async () => {
       if (orbitdb1) {
         await orbitdb1.stop()
       }
-      await rimraf('./orbitdb1')
+      await rimraf('./test/test-data/orbitdb1')
     })
 
     it('has an IPFS instance', async () => {
@@ -152,7 +152,7 @@ describe('OrbitDB', function () {
     })
 
     it('has the directory given as a parameter', async () => {
-      strictEqual(orbitdb1.directory, './orbitdb1')
+      strictEqual(orbitdb1.directory, './test/test-data/orbitdb1')
     })
 
     it('has a keystore', async () => {
@@ -177,7 +177,7 @@ describe('OrbitDB', function () {
     })
 
     it('creates a directory for the keystore', async () => {
-      const directoryExists = fs.existsSync(path.join('./orbitdb1/keystore'))
+      const directoryExists = fs.existsSync(path.join('./test/test-data/orbitdb1/keystore'))
       strictEqual(directoryExists, true)
     })
 
@@ -253,8 +253,8 @@ describe('OrbitDB', function () {
         orbitdb1 = await createOrbitDB()
       } catch (e) {
       }
-      const dataDirectoryExists = fs.existsSync(path.join('./orbitdb'))
-      const keysDirectoryExists = fs.existsSync(path.join('./orbitdb/keystore'))
+      const dataDirectoryExists = fs.existsSync(path.join('./test/test-data/orbitdb'))
+      const keysDirectoryExists = fs.existsSync(path.join('./test/test-data/orbitdb/keystore'))
       strictEqual(dataDirectoryExists, false)
       strictEqual(keysDirectoryExists, false)
     })

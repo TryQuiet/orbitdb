@@ -8,7 +8,7 @@ import connectPeers from '../../utils/connect-nodes.js'
 import waitFor from '../../utils/wait-for.js'
 import createHelia from '../../utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Events Database Replication', function () {
   this.timeout(30000)
@@ -64,10 +64,10 @@ describe('Events Database Replication', function () {
     }
 
     await rimraf(keysPath)
-    await rimraf('./orbitdb1')
-    await rimraf('./orbitdb2')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb1')
+    await rimraf('./test/test-data/orbitdb2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   afterEach(async () => {
@@ -99,8 +99,8 @@ describe('Events Database Replication', function () {
       console.error(err)
     }
 
-    db1 = await Events()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    db1 = await Events()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     db2.events.on('join', onConnected)
     db2.events.on('update', onUpdate)
@@ -145,8 +145,8 @@ describe('Events Database Replication', function () {
       console.error(err)
     }
 
-    db1 = await Events()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './orbitdb1' })
-    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    db1 = await Events()({ ipfs: ipfs1, identity: testIdentity1, address: databaseId, accessController, directory: './test/test-data/orbitdb1' })
+    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     db2.events.on('join', onConnected)
     db2.events.on('update', onUpdate)
@@ -171,7 +171,7 @@ describe('Events Database Replication', function () {
 
     await db2.close()
 
-    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './orbitdb2' })
+    db2 = await Events()({ ipfs: ipfs2, identity: testIdentity2, address: databaseId, accessController, directory: './test/test-data/orbitdb2' })
 
     const all2 = []
     for await (const event of db2.iterator()) {

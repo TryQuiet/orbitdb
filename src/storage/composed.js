@@ -12,6 +12,8 @@
  * await ComposedStorage(storage1, await IPFSBlockStorage())
  */
 
+import EventEmitter from 'events'
+
 /**
   * Creates an instance of ComposedStorage.
   * @function
@@ -21,7 +23,9 @@
   * @memberof module:Storage
   * @instance
   */
-const ComposedStorage = async (storage1, storage2) => {
+const ComposedStorage = async (storage1, storage2, events) => {
+  events = events || new EventEmitter()
+
   /**
    * Puts data to all configured storages.
    * @function
@@ -31,8 +35,13 @@ const ComposedStorage = async (storage1, storage2) => {
    * @instance
    */
   const put = async (hash, data) => {
-    await storage1.put(hash, data)
-    await storage2.put(hash, data)
+    try {
+      await storage1.put(hash, data)
+      await storage2.put(hash, data)
+    } catch (e) {
+      console.error(`Error while putting hash ${hash} into composed storage`, e)
+      events.emit('error', e)
+    }
   }
 
   /**
@@ -47,14 +56,21 @@ const ComposedStorage = async (storage1, storage2) => {
    * @instance
    */
   const get = async (hash) => {
-    let value = await storage1.get(hash)
-    if (!value) {
-      value = await storage2.get(hash)
-      if (value) {
-        await storage1.put(hash, value)
+    try {
+      let value = await storage1.get(hash)
+      if (!value) {
+        value = await storage2.get(hash)
+        if (value) {
+          await storage1.put(hash, value)
+        }
       }
+      return value
+    } catch (e) {
+      console.error(`Error while getting hash ${hash} from composed storage`, e)
+      events.emit('error', e)
     }
-    return value
+
+    return undefined
   }
 
   /**

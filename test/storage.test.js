@@ -6,7 +6,7 @@ import { IPFSBlockStorage, MemoryStorage, LRUStorage, ComposedStorage, LevelStor
 import testKeysPath from './fixtures/test-keys-path.js'
 import createHelia from './utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Storages', function () {
   this.timeout(5000)
@@ -34,7 +34,7 @@ describe('Storages', function () {
     }
 
     await rimraf('./level')
-    await rimraf('./ipfs1')
+    await rimraf('./test/test-data/ipfs1')
     await rimraf(keysPath)
   })
 

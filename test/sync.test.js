@@ -11,7 +11,7 @@ import IPFSBlockStorage from '../src/storage/ipfs-block.js'
 import ComposedStorage from '../src/storage/composed.js'
 import createHelia from './utils/create-helia.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Sync protocol', function () {
   this.timeout(10000)
@@ -40,8 +40,8 @@ describe('Sync protocol', function () {
   after(async () => {
     await ipfs1.stop()
     await ipfs2.stop()
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
     if (keystore) {
       await keystore.close()
     }

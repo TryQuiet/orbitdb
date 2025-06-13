@@ -6,7 +6,7 @@ import testKeysPath from '../fixtures/test-keys-path.js'
 import { tickClock } from '../../src/oplog/clock.js'
 
 const { create, isEntry } = Entry
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Entry', function () {
   this.timeout(5000)

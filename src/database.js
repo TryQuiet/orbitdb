@@ -42,7 +42,7 @@ const defaultCacheSize = 1000
  * @return {module:Databases~Database} An instance of Database.
  * @instance
  */
-const Database = async ({ ipfs, identity, address, name, access, directory, meta, headsStorage, entryStorage, indexStorage, referencesCount, syncAutomatically, onUpdate }) => {
+const Database = async ({ ipfs, identity, address, name, access, directory, meta, headsStorage, entryStorage, indexStorage, referencesCount, syncAutomatically, onUpdate, events }) => {
   /**
    * @namespace module:Databases~Database
    * @description The instance returned by {@link module:Database~Database}.
@@ -93,24 +93,27 @@ const Database = async ({ ipfs, identity, address, name, access, directory, meta
   meta = meta || {}
   referencesCount = Number(referencesCount) > -1 ? referencesCount : defaultReferencesCount
 
+  events = events || new EventEmitter()
+
   entryStorage = entryStorage || await ComposedStorage(
     await LRUStorage({ size: defaultCacheSize }),
-    await IPFSBlockStorage({ ipfs, pin: true })
+    await IPFSBlockStorage({ ipfs, pin: true }),
+    events
   )
 
   headsStorage = headsStorage || await ComposedStorage(
     await LRUStorage({ size: defaultCacheSize }),
-    await LevelStorage({ path: pathJoin(directory, '/log/_heads/') })
+    await LevelStorage({ path: pathJoin(directory, '/log/_heads/') }),
+    events
   )
 
   indexStorage = indexStorage || await ComposedStorage(
     await LRUStorage({ size: defaultCacheSize }),
-    await LevelStorage({ path: pathJoin(directory, '/log/_index/') })
+    await LevelStorage({ path: pathJoin(directory, '/log/_index/') }),
+    events
   )
 
-  const log = await Log(identity, { logId: address, access, entryStorage, headsStorage, indexStorage })
-
-  const events = new EventEmitter()
+  const log = await Log(identity, { logId: address, access, entryStorage, headsStorage, indexStorage, events })
 
   const queue = new PQueue({ concurrency: 1 })
 
@@ -125,13 +128,17 @@ const Database = async ({ ipfs, identity, address, name, access, directory, meta
    */
   const addOperation = async (op) => {
     const task = async () => {
-      const entry = await log.append(op, { referencesCount })
-      await sync.add(entry)
-      if (onUpdate) {
-        await onUpdate(log, entry)
+      try {
+        const entry = await log.append(op, { referencesCount })
+        await sync.add(entry)
+        if (onUpdate) {
+          await onUpdate(log, entry)
+        }
+        events.emit('update', entry)
+        return entry.hash
+      } catch (e) {
+        events.emit('error', e)
       }
-      events.emit('update', entry)
-      return entry.hash
     }
     const hash = await queue.add(task)
     await queue.onIdle()
@@ -140,15 +147,19 @@ const Database = async ({ ipfs, identity, address, name, access, directory, meta
 
   const applyOperation = async (bytes) => {
     const task = async () => {
-      const entry = await Entry.decode(bytes)
-      if (entry) {
-        const updated = await log.joinEntry(entry)
-        if (updated) {
-          if (onUpdate) {
-            await onUpdate(log, entry)
+      try {
+        const entry = await Entry.decode(bytes)
+        if (entry) {
+          const updated = await log.joinEntry(entry)
+          if (updated) {
+            if (onUpdate) {
+              await onUpdate(log, entry)
+            }
+            events.emit('update', entry)
           }
-          events.emit('update', entry)
         }
+      } catch (e) {
+        events.emit('error', e)
       }
     }
     await queue.add(task)
@@ -241,7 +252,7 @@ const Database = async ({ ipfs, identity, address, name, access, directory, meta
      * @memberof module:Databases~Database
      * @instance
      */
-    access,
+    access
   }
 }
 

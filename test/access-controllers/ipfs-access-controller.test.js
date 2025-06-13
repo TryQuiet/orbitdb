@@ -7,8 +7,8 @@ import connectPeers from '../utils/connect-nodes.js'
 import createHelia from '../utils/create-helia.js'
 
 describe('IPFSAccessController', function () {
-  const dbPath1 = './orbitdb/tests/ipfs-access-controller/1'
-  const dbPath2 = './orbitdb/tests/ipfs-access-controller/2'
+  const dbPath1 = './test/test-data/orbitdb/tests/ipfs-access-controller/1'
+  const dbPath2 = './test/test-data/orbitdb/tests/ipfs-access-controller/2'
 
   let ipfs1, ipfs2
   let keystore1, keystore2
@@ -50,9 +50,9 @@ describe('IPFSAccessController', function () {
       await keystore2.close()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   let accessController

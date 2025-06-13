@@ -8,7 +8,7 @@ import IPFSAccessController from '../src/access-controllers/ipfs.js'
 import OrbitDBAccessController from '../src/access-controllers/orbitdb.js'
 import createHelia from './utils/create-helia.js'
 
-const dbPath = './orbitdb/tests/write-permissions'
+const dbPath = './test/test-data/orbitdb/tests/write-permissions'
 
 describe('Write Permissions', function () {
   this.timeout(20000)
@@ -42,9 +42,9 @@ describe('Write Permissions', function () {
       await ipfs2.stop()
     }
 
-    await rimraf('./orbitdb')
-    await rimraf('./ipfs1')
-    await rimraf('./ipfs2')
+    await rimraf('./test/test-data/orbitdb')
+    await rimraf('./test/test-data/ipfs1')
+    await rimraf('./test/test-data/ipfs2')
   })
 
   afterEach(async () => {

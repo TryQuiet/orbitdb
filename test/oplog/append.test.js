@@ -4,7 +4,7 @@ import { copy } from 'fs-extra'
 import { Log, Identities, KeyStore } from '../../src/index.js'
 import testKeysPath from '../fixtures/test-keys-path.js'
 
-const keysPath = './testkeys'
+const keysPath = './test/test-data/testkeys'
 
 describe('Log - Append', function () {
   this.timeout(10000)
