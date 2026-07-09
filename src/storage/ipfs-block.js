@@ -38,8 +38,12 @@ const IPFSBlockStorage = async ({ ipfs, pin, timeout } = {}) => {
    */
   const put = async (hash, data) => {
     const cid = CID.parse(hash, base58btc)
-    const { signal } = new TimeoutController(timeout || DefaultTimeout)
-    await ipfs.blockstore.put(cid, data, { signal })
+    const timeoutController = new TimeoutController(timeout || DefaultTimeout)
+    try {
+      await ipfs.blockstore.put(cid, data, { signal: timeoutController.signal })
+    } finally {
+      timeoutController.clear()
+    }
 
     if (pin && !(await ipfs.pins.isPinned(cid))) {
       await drain(ipfs.pins.add(cid))
@@ -58,10 +62,14 @@ const IPFSBlockStorage = async ({ ipfs, pin, timeout } = {}) => {
    */
   const get = async (hash) => {
     const cid = CID.parse(hash, base58btc)
-    const { signal } = new TimeoutController(timeout || DefaultTimeout)
-    const block = await ipfs.blockstore.get(cid, { signal })
-    if (block) {
-      return block
+    const timeoutController = new TimeoutController(timeout || DefaultTimeout)
+    try {
+      const block = await ipfs.blockstore.get(cid, { signal: timeoutController.signal })
+      if (block) {
+        return block
+      }
+    } finally {
+      timeoutController.clear()
     }
   }
 
